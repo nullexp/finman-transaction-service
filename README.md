@@ -27,7 +27,7 @@ The Transaction Service is a microservice responsible for managing financial tra
 1. Clone the repository:
 
 ```sh
-git clone https://github.com/yourusername/transaction-service.git
+git clone https://github.com/nullexp/finman-transaction-service
 cd transaction-service
 ```
 
