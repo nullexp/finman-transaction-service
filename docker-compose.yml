@@ -9,6 +9,8 @@ services:
       PGPORT: 5433
     ports:
       - "5433:5433"
+    networks:
+      - finman-network
     volumes:
       - postgres-transaction-data:/var/lib/postgresql/data
       - ./internal/adapter/driven/db/migration/init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql into the container
@@ -32,6 +34,13 @@ services:
     depends_on:
       - postgres
     restart: always
+    networks:
+      - finman-network
+
+networks:
+  finman-network:
+    driver: bridge
+    external: true
 
 volumes:
   postgres-transaction-data:
