@@ -7,6 +7,8 @@ import (
 	transactionv1 "github.com/nullexp/finman-transaction-service/internal/adapter/driver/grpc/proto/transaction/v1"
 	"github.com/nullexp/finman-transaction-service/internal/port/driver"
 	"github.com/nullexp/finman-transaction-service/internal/port/model"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type TransactionService struct {
@@ -53,7 +55,7 @@ func (ts TransactionService) CreateTransaction(ctx context.Context, request *tra
 		Description: request.Description,
 	})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "CreateTransaction failed : %v", err)
 	}
 
 	return &transactionv1.CreateTransactionResponse{Id: rs.Id}, nil
@@ -62,7 +64,7 @@ func (ts TransactionService) CreateTransaction(ctx context.Context, request *tra
 func (ts TransactionService) GetTransactionById(ctx context.Context, request *transactionv1.GetTransactionByIdRequest) (*transactionv1.GetTransactionByIdResponse, error) {
 	rs, err := ts.service.GetTransactionById(ctx, model.GetTransactionByIdRequest{Id: request.Id})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "GetTransactionById failed : %v", err)
 	}
 
 	return &transactionv1.GetTransactionByIdResponse{Transaction: CastTransactionToProto(&rs.Transaction)}, nil
@@ -71,7 +73,7 @@ func (ts TransactionService) GetTransactionById(ctx context.Context, request *tr
 func (ts TransactionService) GetTransactionsByUserId(ctx context.Context, request *transactionv1.GetTransactionsByUserIdRequest) (*transactionv1.GetTransactionsByUserIdResponse, error) {
 	rs, err := ts.service.GetTransactionsByUserId(ctx, model.GetTransactionsByUserIdRequest{UserId: request.UserId})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "GetTransactionsByUserId failed : %v", err)
 	}
 
 	return &transactionv1.GetTransactionsByUserIdResponse{Transactions: CastTransactionsToProtoArray(rs.Transactions)}, nil
@@ -80,7 +82,7 @@ func (ts TransactionService) GetTransactionsByUserId(ctx context.Context, reques
 func (ts TransactionService) GetOwnTransactionById(ctx context.Context, request *transactionv1.GetOwnTransactionByIdRequest) (*transactionv1.GetOwnTransactionByIdResponse, error) {
 	rs, err := ts.service.GetOwnTransactionById(ctx, model.GetOwnTransactionByIdRequest{UserId: request.UserId, Id: request.Id})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "GetOwnTransactionById failed : %v", err)
 	}
 
 	return &transactionv1.GetOwnTransactionByIdResponse{Transaction: CastTransactionToProto(&rs.Transaction)}, nil
@@ -89,7 +91,7 @@ func (ts TransactionService) GetOwnTransactionById(ctx context.Context, request 
 func (ts TransactionService) GetAllTransactions(ctx context.Context, request *transactionv1.GetAllTransactionsRequest) (*transactionv1.GetAllTransactionsResponse, error) {
 	rs, err := ts.service.GetAllTransactions(ctx)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "GetAllTransactions failed : %v", err)
 	}
 
 	return &transactionv1.GetAllTransactionsResponse{Transactions: CastTransactionsToProtoArray(rs.Transactions)}, nil
@@ -104,7 +106,7 @@ func (ts TransactionService) UpdateTransaction(ctx context.Context, request *tra
 		Description: request.Description,
 	})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "UpdateTransaction failed : %v", err)
 	}
 
 	return &transactionv1.UpdateTransactionResponse{}, nil
@@ -113,7 +115,7 @@ func (ts TransactionService) UpdateTransaction(ctx context.Context, request *tra
 func (ts TransactionService) DeleteTransaction(ctx context.Context, request *transactionv1.DeleteTransactionRequest) (*transactionv1.DeleteTransactionResponse, error) {
 	err := ts.service.DeleteTransaction(ctx, model.DeleteTransactionRequest{Id: request.Id})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "DeleteTransaction failed : %v", err)
 	}
 
 	return &transactionv1.DeleteTransactionResponse{}, nil
@@ -122,7 +124,7 @@ func (ts TransactionService) DeleteTransaction(ctx context.Context, request *tra
 func (ts TransactionService) GetTransactionsWithPagination(ctx context.Context, request *transactionv1.GetTransactionsWithPaginationRequest) (*transactionv1.GetTransactionsWithPaginationResponse, error) {
 	rs, err := ts.service.GetTransactionsWithPagination(ctx, model.GetTransactionsWithPaginationRequest{Offset: int(request.Offset), Limit: int(request.Limit)})
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "GetTransactionsWithPagination failed : %v", err)
 	}
 
 	return &transactionv1.GetTransactionsWithPaginationResponse{Transactions: CastTransactionsToProtoArray(rs.Transactions)}, nil
