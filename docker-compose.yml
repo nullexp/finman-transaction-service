@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres-transaction
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGPORT: 5433
+    ports:
+      - "5433:5433"
+    volumes:
+      - postgres-transaction-data:/var/lib/postgresql/data
+      - ./internal/adapter/driven/db/migration/init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount init.sql into the container
+
+  app:
+    image: finman-transaction-service:latest  # Specify the image name and tag
+    container_name: finman-transaction-container
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5433
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: finman-transaction
+      PORT: 8082
+      IP: 0.0.0.0
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+    restart: always
+
+volumes:
+  postgres-transaction-data:
+ 

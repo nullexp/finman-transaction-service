@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package transaction.v1;
+
+// TransactionService service definition
+service TransactionService {
+    rpc CreateTransaction(CreateTransactionRequest) returns (CreateTransactionResponse);
+    rpc GetTransactionById(GetTransactionByIdRequest) returns (GetTransactionByIdResponse);
+    rpc GetTransactionsByUserId(GetTransactionsByUserIdRequest) returns (GetTransactionsByUserIdResponse);
+    rpc GetOwnTransactionById(GetOwnTransactionByIdRequest) returns (GetOwnTransactionByIdResponse);
+    rpc GetAllTransactions(GetAllTransactionsRequest) returns (GetAllTransactionsResponse);
+    rpc UpdateTransaction(UpdateTransactionRequest) returns (UpdateTransactionResponse);
+    rpc DeleteTransaction(DeleteTransactionRequest) returns (DeleteTransactionResponse);
+    rpc GetTransactionsWithPagination(GetTransactionsWithPaginationRequest) returns (GetTransactionsWithPaginationResponse);
+}
+
+// Transaction message definition
+message Transaction {
+  string id = 1;
+  string user_id = 2;
+  string type = 3; // deposit or withdrawal
+  int64 amount = 4;
+  string date = 5; // timestamp
+  string description = 6;
+  string created_at = 7; // timestamp
+  string updated_at = 8; // timestamp
+}
+
+// CreateTransaction request and response
+message CreateTransactionRequest {
+  string user_id = 1;
+  string type = 2;
+  int64 amount = 3;
+  string description = 4;
+}
+
+message CreateTransactionResponse {
+  string id = 1;
+}
+
+// GetTransactionById request and response
+message GetTransactionByIdRequest {
+  string id = 1;
+}
+
+message GetTransactionByIdResponse {
+  Transaction transaction = 1;
+}
+
+// GetTransactionsByUserId request and response
+message GetTransactionsByUserIdRequest {
+  string user_id = 1;
+}
+
+message GetTransactionsByUserIdResponse {
+  repeated Transaction transactions = 1;
+}
+
+// GetAllTransactions request and response
+message GetAllTransactionsRequest {}
+
+message GetAllTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
+
+// UpdateTransaction request and response
+message UpdateTransactionRequest {
+  string id = 1;
+  string type = 2;
+  int64 amount = 3;
+  string description = 4;
+  string user_id = 5;
+}
+
+message UpdateTransactionResponse {}
+
+// DeleteTransaction request and response
+message DeleteTransactionRequest {
+  string id = 1;
+}
+
+message DeleteTransactionResponse {}
+
+// GetTransactionsWithPagination request and response
+message GetTransactionsWithPaginationRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+}
+
+message GetTransactionsWithPaginationResponse {
+  repeated Transaction transactions = 1;
+}
+
+message GetOwnTransactionByIdRequest {
+  string id = 1;
+  string user_id = 2;
+
+}
+message GetOwnTransactionByIdResponse {
+   Transaction transaction = 1;
+}
