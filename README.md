@@ -21,6 +21,7 @@ The Transaction Service is a microservice responsible for managing financial tra
 
 - Docker
 - Docker Compose
+- makefile
 
 ## Setup
 
@@ -31,23 +32,12 @@ git clone https://github.com/nullexp/finman-transaction-service
 cd transaction-service
 ```
 
-2. Create a `.env` file in the root directory and set the following environment variables:
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=transaction_db
-PORT=8080
-```
-
 ## Running the Service
 
 To run the service, use Docker Compose:
 
 ```sh
-docker-compose up
+docker-compose up --build 
 ```
 
 This command will build the Docker images and start the containers defined in the `docker-compose.yml` file.
